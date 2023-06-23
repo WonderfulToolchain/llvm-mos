@@ -232,7 +232,7 @@ option(COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN
   "Skip the atomic builtin (these should normally be provided by a shared library)"
   On)
 
-if(NOT FUCHSIA AND NOT COMPILER_RT_BAREMETAL_BUILD)
+if(NOT FUCHSIA AND NOT MOS AND NOT COMPILER_RT_BAREMETAL_BUILD)
   set(GENERIC_SOURCES
     ${GENERIC_SOURCES}
     emutls.c
@@ -267,7 +267,7 @@ if (HAVE_UNWIND_H)
   )
 endif ()
 
-if (NOT FUCHSIA)
+if (NOT FUCHSIA AND NOT MOS)
   set(GENERIC_SOURCES
     ${GENERIC_SOURCES}
     clear_cache.c
@@ -678,6 +678,10 @@ set(mips64_SOURCES ${GENERIC_TF_SOURCES}
                    ${mips_SOURCES})
 set(mips64el_SOURCES ${GENERIC_TF_SOURCES}
                      ${mips_SOURCES})
+
+set(mos_SOURCES ${GENERIC_SOURCES})
+# Filter floating-point only routines, which aren't supported on MOS.
+list(FILTER mos_SOURCES EXCLUDE REGEX "^(float.+|fp.+|fix.+|.+[dst][cf][0-9]\.[a-z]+)$")
 
 set(powerpc_SOURCES ${GENERIC_SOURCES})
 

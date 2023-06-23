@@ -84,28 +84,33 @@ void mos::Linker::ConstructJob(Compilation &C, const JobAction &JA,
                             options::OPT_e, options::OPT_s, options::OPT_t,
                             options::OPT_Z_Flag, options::OPT_r});
 
-  if (!Args.hasArg(options::OPT_nostartfiles, options::OPT_nostdlib)) {
-    // Prefixing a colon causes GNU LD-like linkers to search for this filename
-    // as-is. This contains the minimum necessary startup library.
-    CmdArgs.push_back("-l:crt0.o");
+  // Hack: If not using an llvm-mos-sdk clang binary (mos-clang,
+  // mos-common-clang, etc.), do not include the default crt0/linkscript.
+  // This allows compiling LLVM's runtimes.
+  if (C.getDriver().getTargetTriple() != "mos-unknown-unknown") {
+    if (!Args.hasArg(options::OPT_nostartfiles, options::OPT_nostdlib)) {
+      // Prefixing a colon causes GNU LD-like linkers to search for this filename
+      // as-is. This contains the minimum necessary startup library.
+      CmdArgs.push_back("-l:crt0.o");
 
-    // libcrt0.a contains optional startup objects that are only pulled in if
-    // referenced.
-    CmdArgs.push_back("-lcrt0");
+      // libcrt0.a contains optional startup objects that are only pulled in if
+      // referenced.
+      CmdArgs.push_back("-lcrt0");
+    }
+
+    if (!Args.hasArg(options::OPT_nodefaultlibs, options::OPT_nostdlib))
+      CmdArgs.push_back("-lcrt");
+
+    if (!Args.hasArg(options::OPT_nodefaultlibs, options::OPT_nolibc,
+                    options::OPT_nostdlib))
+      CmdArgs.push_back("-lc");
+
+    // No matter what's included in the link, the default linker script is
+    // nonsense for the 6502. Accordingly, use one named "link.ld" if none is
+    // specified.
+    if (!Args.hasArg(options::OPT_T))
+      CmdArgs.push_back("-Tlink.ld");
   }
-
-  if (!Args.hasArg(options::OPT_nodefaultlibs, options::OPT_nostdlib))
-    CmdArgs.push_back("-lcrt");
-
-  if (!Args.hasArg(options::OPT_nodefaultlibs, options::OPT_nolibc,
-                   options::OPT_nostdlib))
-    CmdArgs.push_back("-lc");
-
-  // No matter what's included in the link, the default linker script is
-  // nonsense for the 6502. Accordingly, use one named "link.ld" if none is
-  // specified.
-  if (!Args.hasArg(options::OPT_T))
-    CmdArgs.push_back("-Tlink.ld");
 
   CmdArgs.push_back("-o");
   CmdArgs.push_back(Output.getFilename());

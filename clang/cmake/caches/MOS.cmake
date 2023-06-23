@@ -70,3 +70,8 @@ set(CLANG_LINKS_TO_CREATE ${CLANG_LINKS_TO_CREATE}
 
 # Disable bindings since they can be problematic for the install pattern used along with llvm-mos-sdk.
 set(LLVM_ENABLE_BINDINGS OFF CACHE BOOL "Build bindings.")
+
+# Enable runtimes.
+set(LLVM_ENABLE_RUNTIMES compiler-rt CACHE STRING "")
+set(COMPILER_RT_BAREMETAL_BUILD ON CACHE BOOL "")
+set(COMPILER_RT_INCLUDE_TESTS OFF CACHE BOOL "")
