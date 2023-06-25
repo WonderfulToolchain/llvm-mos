@@ -8,6 +8,7 @@
 
 #include "src/__support/StringUtil/error_to_string.h"
 
+#include "src/__support/macros/config.h" // LLVM_LIBC_THREAD_LOCAL
 #include "src/errno/libc_errno.h" // For error macros
 
 #include "src/__support/CPP/array.h"
@@ -35,7 +36,7 @@ constexpr size_t max_buff_size() {
 // This is to hold error strings that have to be custom built. It may be
 // rewritten on every call to strerror (or other error to string function).
 constexpr size_t ERR_BUFFER_SIZE = max_buff_size();
-thread_local char error_buffer[ERR_BUFFER_SIZE];
+LLVM_LIBC_THREAD_LOCAL char error_buffer[ERR_BUFFER_SIZE];
 
 constexpr size_t RAW_ARRAY_LEN = PLATFORM_ERRORS.size();
 constexpr size_t TOTAL_STR_LEN =

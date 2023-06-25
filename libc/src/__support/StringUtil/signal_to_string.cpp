@@ -6,6 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "src/__support/macros/config.h" // LLVM_LIBC_THREAD_LOCAL
 #include "src/__support/StringUtil/signal_to_string.h"
 
 #include "src/__support/CPP/span.h"
@@ -32,7 +33,7 @@ constexpr size_t max_buff_size() {
 // This is to hold signal strings that have to be custom built. It may be
 // rewritten on every call to strsignal (or other signal to string function).
 constexpr size_t SIG_BUFFER_SIZE = max_buff_size();
-thread_local char signal_buffer[SIG_BUFFER_SIZE];
+LLVM_LIBC_THREAD_LOCAL char signal_buffer[SIG_BUFFER_SIZE];
 
 constexpr size_t RAW_ARRAY_LEN = PLATFORM_SIGNALS.size();
 constexpr size_t TOTAL_STR_LEN =

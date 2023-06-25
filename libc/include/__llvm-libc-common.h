@@ -30,7 +30,11 @@
 #define _Alignof alignof
 
 #undef _Thread_local
+#if !defined(__mos__)
 #define _Thread_local thread_local
+#else
+#define _Thread_local
+#endif
 
 #undef __NOEXCEPT
 #define __NOEXCEPT noexcept

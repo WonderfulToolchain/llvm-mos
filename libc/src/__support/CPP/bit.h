@@ -18,8 +18,10 @@ namespace __llvm_libc::cpp {
 #define LLVM_LIBC_HAS_BUILTIN_BIT_CAST
 #endif
 
+#if !defined(__mos__)
 #if LIBC_HAS_BUILTIN(__builtin_memcpy_inline)
 #define LLVM_LIBC_HAS_BUILTIN_MEMCPY_INLINE
+#endif
 #endif
 
 // This function guarantees the bitcast to be optimized away by the compiler for

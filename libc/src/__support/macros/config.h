@@ -15,6 +15,12 @@
 
 #define LIBC_INLINE inline
 
+#if !defined(__mos__)
+#define LLVM_LIBC_THREAD_LOCAL thread_local
+#else
+#define LLVM_LIBC_THREAD_LOCAL
+#endif
+
 // LIBC_HAS_BUILTIN()
 //
 // Checks whether the compiler supports a Clang Feature Checking Macro, and if

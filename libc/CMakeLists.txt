@@ -201,9 +201,11 @@ endif()
 # of the other directories.
 # TODO: Add testing support for the libc GPU target.
 add_subdirectory(lib)
-if(LLVM_INCLUDE_TESTS)
-  add_subdirectory(test)
-  add_subdirectory(fuzzing)
+if(NOT LIBC_TARGET_ARCHITECTURE_IS_MOS)
+  if(LLVM_INCLUDE_TESTS)
+    add_subdirectory(test)
+    add_subdirectory(fuzzing)
+  endif()
 endif()
 
 if(LIBC_INCLUDE_BENCHMARKS)

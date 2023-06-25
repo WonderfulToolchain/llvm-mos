@@ -82,12 +82,14 @@ template <size_t alignment, typename T> static T *assume_aligned(T *ptr) {
   return reinterpret_cast<T *>(__builtin_assume_aligned(ptr, alignment));
 }
 
+#if !defined(__mos__)
 #if LIBC_HAS_BUILTIN(__builtin_memcpy_inline)
 #define LLVM_LIBC_HAS_BUILTIN_MEMCPY_INLINE
 #endif
 
 #if LIBC_HAS_BUILTIN(__builtin_memset_inline)
 #define LLVM_LIBC_HAS_BUILTIN_MEMSET_INLINE
+#endif
 #endif
 
 // Performs a constant count copy.
@@ -137,8 +139,13 @@ private:
   T value;
 };
 
+#if defined(__mos__)
+using MemcmpReturnType = StrictIntegralType<int16_t>;
+using BcmpReturnType = StrictIntegralType<uint16_t>;
+#else
 using MemcmpReturnType = StrictIntegralType<int32_t>;
 using BcmpReturnType = StrictIntegralType<uint32_t>;
+#endif
 
 // Loads bytes from memory (possibly unaligned) and materializes them as
 // type.

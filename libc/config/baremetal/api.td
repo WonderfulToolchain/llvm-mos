@@ -28,3 +28,11 @@ def StdlibAPI : PublicAPI<"stdlib.h"> {
 def StringAPI : PublicAPI<"string.h"> {
   let Types = ["size_t"];
 }
+
+def WCharAPI : PublicAPI<"wchar.h"> {
+  let Types = [
+    "wchar_t",
+    "wint_t",
+    "size_t",
+  ];
+}

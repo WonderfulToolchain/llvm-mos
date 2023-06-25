@@ -114,7 +114,7 @@ template <typename T> T splat(uint8_t value) {
   }
 }
 
-static_assert((UINTPTR_MAX == 4294967295U) ||
+static_assert((UINTPTR_MAX == 65535U) || (UINTPTR_MAX == 4294967295U) ||
                   (UINTPTR_MAX == 18446744073709551615UL),
               "We currently only support 32- or 64-bit platforms");
 

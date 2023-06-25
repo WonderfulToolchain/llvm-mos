@@ -10,6 +10,6 @@
 
 namespace __llvm_libc {
 
-thread_local unsigned long rand_next;
+LLVM_LIBC_THREAD_LOCAL unsigned long rand_next;
 
 } // namespace __llvm_libc
